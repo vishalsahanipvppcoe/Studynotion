@@ -32,7 +32,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://m-three-red.vercel.app" // ✅ ADDED (IMPORTANT)
+      "https://studynotion-liard-zeta.vercel.app",
     ],
     credentials: true,
   })
