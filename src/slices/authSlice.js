@@ -7,6 +7,7 @@ if (storedToken) {
     parsedToken = JSON.parse(storedToken);
   } catch (error) {
     // If the token was stored as a raw string instead of JSON, we catch the error and use it directly
+    console.warn("Token was not JSON, using raw string.", error);
     parsedToken = storedToken;
   }
 }
