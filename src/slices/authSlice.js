@@ -1,9 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+let parsedToken = null;
+const storedToken = localStorage.getItem("token");
+if (storedToken) {
+  try {
+    parsedToken = JSON.parse(storedToken);
+  } catch (error) {
+    // If the token was stored as a raw string instead of JSON, we catch the error and use it directly
+    parsedToken = storedToken;
+  }
+}
+
 const initialState = {
   signupData: null,
   loading: false,
-  token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null,
+  token: parsedToken,
 };
 
 const authSlice = createSlice({
