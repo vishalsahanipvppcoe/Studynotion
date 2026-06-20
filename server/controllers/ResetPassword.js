@@ -25,7 +25,8 @@ exports.resetPasswordToken = async (req, res) => {
 		);
 		console.log("DETAILS", updatedDetails);
 
-		const url = `https://studynotion-liard-zeta.vercel.app/update-password/${token}`;
+		const frontendUrl = process.env.FRONTEND_URL || "https://studynotion-liard-zeta.vercel.app";
+		const url = `${frontendUrl}/update-password/${token}`;
 
 		await mailSender(
 			email,

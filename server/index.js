@@ -35,7 +35,8 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://studynotion-liard-zeta.vercel.app",
-    ],
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
   })
 );
