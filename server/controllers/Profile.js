@@ -92,13 +92,12 @@ exports.deleteAccount = async (req, res) => {
 
     // Remove student from enrolled courses
     if (user.courses && user.courses.length > 0) {
-      await Promise.all(
-        user.courses.map((courseId) =>
-          Course.findByIdAndUpdate(courseId, {
-            $pull: { studentsEnrolled: id }, // ✅ CORRECT FIELD NAME
-          })
-        )
+      const courseUnenrollPromises = user.courses.map((courseId) =>
+        Course.findByIdAndUpdate(courseId, {
+          $pull: { studentsEnrolled: id },
+        })
       );
+      await Promise.all(courseUnenrollPromises);
     }
 
     // Delete course progress
