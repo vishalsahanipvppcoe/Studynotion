@@ -40,10 +40,11 @@ exports.resetPasswordToken = async (req, res) => {
 				"Email Sent Successfully, Please Check Your Email to Continue Further",
 		});
 	} catch (error) {
+		console.error("resetPasswordToken error:", error.message);
 		return res.json({
 			error: error.message,
 			success: false,
-			message: `Some Error in Sending the Reset Message`,
+			message: `Some Error in Sending the Reset Message: ${error.message}`,
 		});
 	}
 };
