@@ -34,7 +34,8 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://studynotion-liard-zeta.vercel.app",
   "https://studynotion-git-main-vishalsahanipvppcoes-projects.vercel.app",
-];
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
 app.use(
   cors({
@@ -42,7 +43,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error("Not allowed by CORS"));
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })

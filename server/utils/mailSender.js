@@ -1,43 +1,37 @@
-const nodemailer = require("nodemailer");
+const brevo = require("@getbrevo/brevo");
 
 const mailSender = async (email, title, body) => {
   try {
-    console.log("MAIL_HOST:", process.env.MAIL_HOST);
-    console.log("MAIL_PORT:", process.env.MAIL_PORT);
-    console.log("MAIL_USER:", process.env.MAIL_USER);
-    console.log("MAIL_FROM:", process.env.MAIL_FROM);
+    const apiInstance = new brevo.TransactionalEmailsApi();
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: Number(process.env.MAIL_PORT),
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+    apiInstance.setApiKey(
+      brevo.TransactionalEmailsApiApiKeys.apiKey,
+      process.env.BREVO_API_KEY
+    );
+
+    const sendSmtpEmail = new brevo.SendSmtpEmail();
+
+    sendSmtpEmail.sender = {
+      name: "StudyNotion",
+      email: process.env.MAIL_FROM,
+    };
+
+    sendSmtpEmail.to = [
+      {
+        email: email,
       },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
-    });
+    ];
 
-    console.log("Verifying SMTP connection...");
-    await transporter.verify();
-    console.log("SMTP Connected Successfully");
+    sendSmtpEmail.subject = title;
+    sendSmtpEmail.htmlContent = body;
 
-    const info = await transporter.sendMail({
-      from: `"StudyNotion" <${process.env.MAIL_FROM}>`,
-      to: email,
-      subject: title,
-      html: body,
-    });
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
 
-    console.log("Email sent:", info);
-    return info;
+    console.log("Email sent successfully:", response);
 
+    return response;
   } catch (error) {
-    console.error("MailSender Error:");
-    console.error(error);
+    console.error("Brevo Error:", error);
     throw error;
   }
 };
