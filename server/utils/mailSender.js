@@ -11,7 +11,7 @@ const mailSender = async (email, title, body) => {
         },
         to: [
           {
-            email,
+            email: email,
           },
         ],
         subject: title,
@@ -20,14 +20,13 @@ const mailSender = async (email, title, body) => {
       {
         headers: {
           accept: "application/json",
-          "api-key": process.env.BREVO_API_KEY,
           "content-type": "application/json",
+          "api-key": process.env.BREVO_API_KEY,
         },
       }
     );
 
     console.log("Email sent successfully:", response.data);
-
     return response.data;
   } catch (error) {
     console.error(
