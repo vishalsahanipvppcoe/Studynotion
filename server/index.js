@@ -30,15 +30,21 @@ app.use(cookieParser());
    ✔ allows deployed frontend (vercel)
    ✔ enables cookies
 */
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://studynotion-liard-zeta.vercel.app",
+  "https://studynotion-git-main-vishalsahanipvppcoes-projects.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
