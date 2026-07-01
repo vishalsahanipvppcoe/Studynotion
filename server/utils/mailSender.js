@@ -1,20 +1,28 @@
-const { Resend } = require("resend");
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+const nodemailer = require("nodemailer");
 
 const mailSender = async (email, title, body) => {
   try {
-    const data = await resend.emails.send({
-      from: process.env.EMAIL_FROM,
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: Number(process.env.MAIL_PORT) || 587,
+      secure: false, // Port 587 uses STARTTLS
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `"StudyNotion" <${process.env.MAIL_USER}>`,
       to: email,
       subject: title,
       html: body,
     });
 
-    console.log("Email sent:", data);
-    return data;
+    console.log("Email sent:", info.messageId);
+    return info;
   } catch (error) {
-    console.error("Resend Error:", error);
+    console.error("MailSender Error:", error);
     throw error;
   }
 };
