@@ -2,10 +2,13 @@ const nodemailer = require("nodemailer");
 
 const mailSender = async (email, title, body) => {
   try {
+    console.log("MAIL_HOST:", process.env.MAIL_HOST);
+    console.log("MAIL_USER:", process.env.MAIL_USER);
+
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
-      port: Number(process.env.MAIL_PORT) || 587,
-      secure: false, // Port 587 uses STARTTLS
+      port: Number(process.env.MAIL_PORT),
+      secure: false, // Port 587
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
@@ -13,7 +16,7 @@ const mailSender = async (email, title, body) => {
     });
 
     const info = await transporter.sendMail({
-      from: `"StudyNotion" <${process.env.MAIL_USER}>`,
+      from: `"StudyNotion" <${process.env.MAIL_FROM}>`,
       to: email,
       subject: title,
       html: body,
