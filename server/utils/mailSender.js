@@ -1,4 +1,10 @@
 const axios = require("axios");
+console.log(
+  "BREVO_API_KEY:",
+  process.env.BREVO_API_KEY
+    ? process.env.BREVO_API_KEY.substring(0, 10)
+    : "NOT FOUND"
+);
 
 const mailSender = async (email, title, body) => {
   try {
